@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <style type="text/css">
+            .clock{
+                background: transparent url(./resources/img/clock.svg) center center no-repeat;
+                background-size: 400px 400px;
+                height: 400px;
+                width: 400px;
+                margin: 100px auto;
+                box-sizing: border-box;
+                position: relative;
+                border-radius: 200px;
+            }
+
+            .face{
+                background: url(./resources/img/leeloo-face.png) center center no-repeat;
+                height: 150px;
+                width: 150px;
+                position: absolute;
+                top: 125px;
+                left: 125px;
+                transition: transform 0.2s;
+            }
+
+            .hand{
+                width: 200px;
+                height: 50px;
+                top: 175px;
+                left: 0;
+                position: absolute;
+                transition: transform 0.2s;
+            }
+
+            .hand.minute-hand{
+                background:  url(./resources/img/leeloo-left.png) center right 25px no-repeat;
+                transform-origin: center right;
+            }
+            .hand.hour-hand{
+                background:  url(./resources/img/leeloo-right.png) center left 25px no-repeat;
+                transform-origin: center left;
+                left: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="clock">
+            <div id="clock-hour-hand" class="hand hour-hand"></div>
+            <div id="clock-minute-hand" class="hand minute-hand"></div>
+            <div id="clock-face" class="face"></div>
+        </div>
+        <script>
+            const face = document.getElementById("clock-face");
+            const hourHand = document.getElementById("clock-hour-hand");
+            const minuteHand = document.getElementById("clock-minute-hand");
+
+            //Minute at 0 deg is 3 o'clock
+            //Hour at 0 deg is 45 minutes
+
+            const tick = function(){
+                let dateTime = new Date();
+                let hour = dateTime.getHours() % 12;
+                let minute = dateTime.getMinutes();
+                let seconds = dateTime.getSeconds();
+
+                let rotateFace, rotateHour, rotateMinute = 0;
+                let hourDelta = 360/12;
+                let minuteDelta = 360/60;
+
+                if(seconds % 2 === 0){
+                    rotateFace =  5;
+                }else{
+                    rotateFace = -5;
+                }
+
+                rotateHour = (((hour + (minute/60)) - 3) * hourDelta) + 360;
+                rotateMinute = ((minute + (seconds/60) - 45) * minuteDelta) + 360;
+
+                face.setAttribute("style", `transform: rotate(${rotateFace}deg);`);
+                minuteHand.setAttribute("style", `transform: rotate(${rotateMinute}deg);`);
+                hourHand.setAttribute("style", `transform: rotate(${rotateHour}deg);`);
+            }
+
+            setInterval(tick, 1000);
+
+        </script>
+    </body>
+</html>
